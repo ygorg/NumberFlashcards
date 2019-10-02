@@ -14,6 +14,7 @@ This app fills the need for flashcards with generatable data.
 	- [ ] Choose the number generation range
 	- Store counter and SRL related into the localStorage
 - Render
+	- [ ] Add card flipping animation
 	- [ ] Add score counter
 	- [ ] Make the cards prettier
 	- [ ] Add menu for settings
