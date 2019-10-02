@@ -25,7 +25,7 @@ This app fills the need for flashcards with generatable data.
 	- [ ] Make it abstract for other languages
 
 ## Credits
-Modified : [swing](https://github.com/gajus/swing)
-Used as based and hacked : [react-swing](https://github.com/ssanjun/react-swing)
-Inspired from : [stackoverflow codereview](https://codereview.stackexchange.com/questions/78278/simplistic-flash-card-web-app)
-Translated to JS : [Convert-Numbers-to-Japanese-flask](https://github.com/Greatdane/Convert-Numbers-to-Japanese-flask)
+* Modified : [swing](https://github.com/gajus/swing)
+* Used as based and hacked : [react-swing](https://github.com/ssanjun/react-swing)
+* Inspired from : [stackoverflow codereview](https://codereview.stackexchange.com/questions/78278/simplistic-flash-card-web-app)
+* Translated to JS : [Convert-Numbers-to-Japanese-flask](https://github.com/Greatdane/Convert-Numbers-to-Japanese-flask)
