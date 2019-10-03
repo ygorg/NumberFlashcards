@@ -46,14 +46,14 @@ var len_three = function (convert_num, requested_dict) {
 		num_list.push(requested_dict[convert_num[0]]);
 		num_list.push(requested_dict['100']);
 	}
-	if (convert_num.slice(1, null) === '00' && convert_num.length === 3) {
+	if (convert_num.slice(1) === '00' && convert_num.length === 3) {
 		// pass;
 	}
 	else if (convert_num[1] === '0') {
 		num_list.push(requested_dict[convert_num[2]]);
 	}
 	else {
-		num_list.push(len_two(convert_num.slice(1, null), requested_dict));
+		num_list.push(len_two(convert_num.slice(1), requested_dict));
 	}
 	return num_list.join(' ');
 };
@@ -64,7 +64,7 @@ var len_four = function (convert_num, requested_dict) {
 		return '';
 	}
 	while (convert_num[0] === '0') {
-		convert_num = convert_num.slice(1, null);
+		convert_num = convert_num.slice(1);
 	}
 	if (convert_num.length === 1) {
 		return len_one(convert_num, requested_dict);
@@ -89,14 +89,14 @@ var len_four = function (convert_num, requested_dict) {
 			num_list.push(requested_dict[convert_num[0]]);
 			num_list.push(requested_dict['1000']);
 		}
-		if (convert_num.slice(1, null) === '000' && convert_num.length === 4) {
+		if (convert_num.slice(1) === '000' && convert_num.length === 4) {
 			// pass;
 		}
 		else if (convert_num[1] === '0') {
-			num_list.push(len_two(convert_num.slice(2, null), requested_dict));
+			num_list.push(len_two(convert_num.slice(2), requested_dict));
 		}
 		else {
-			num_list.push(len_three(convert_num.slice(1, null), requested_dict));
+			num_list.push(len_three(convert_num.slice(1), requested_dict));
 		}
 		return num_list.join(' ');
 	}
@@ -131,7 +131,7 @@ var len_x = function (convert_num, requested_dict) {
 	else {
 		return 'Not yet implemented, please choose a lower number.';
 	}
-	num_list.push(len_four(convert_num.slice(-4, null), requested_dict));
+	num_list.push(len_four(convert_num.slice(-4), requested_dict));
 	return num_list.join(' ');
 };
 
@@ -174,10 +174,14 @@ var split_point = function (num, dict_choice) {
 };
 
 var web_convert = function (convert_num, dict_choice) {
+
 	let result = null;
 	convert_num = String(convert_num);
 	convert_num = convert_num.replace(',', '');
-	convert_num = convert_num.replace(/^0+/, '');
+	// Stripping 0's from the beginning and the end
+	//  but the integer part should not be empty
+	convert_num = convert_num.replace(/^0+/, '0').replace(/\.\d+0+$/, '');
+	convert_num = convert_num.replace(/^0([1-9])/, '$1');
 
 	if (convert_num.indexOf('.') >= 0) {
 		result = split_point(convert_num, dict_choice);
