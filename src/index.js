@@ -181,6 +181,41 @@ class ReactSwing extends Component {
   }
 }
 
+class Settings extends Component{
+
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+
+  render() {
+    const props = this.props;
+    return <div ref={this.ref}>
+      {['Romaji', 'Hiragana', 'Kanji'].map((e, i) =>
+          <div key={"settingdisp"+String(i)}>
+          <label htmlFor={"disp"+e}>{e}</label>
+            <input type="checkbox" name={"disp"+e} id={"disp"+e}
+              defaultChecked={this.props.settings['disp'+e]}
+              onChange={this.props.handleInputChange}/>
+          </div>
+      )}
+      
+      Level
+        {Array(4).fill(0).map((_, i) =>
+          <div key={"settinglevel"+i}>
+            <label htmlFor={'level' + i}>{'Level' + i}</label>
+            <input
+              type="radio" name="level"
+              id={'level' + i} value={i}
+              defaultChecked={i === this.props.settings.level}
+              onChange={this.props.handleInputChange}
+            />
+          </div>
+          )
+        }
+    </div>;
+  }
+}
 
 class App extends Component {
 
@@ -193,7 +228,11 @@ class App extends Component {
       card_list: [generator.next(), generator.next(), generator.next()],
       stack: null,
       generator: generator,
+      settings: {level: 2, dispRomaji: true},
     };
+
+    // defining defaults values for settings here
+    // TODO: maybe refactor so defaults are defined in Settings class
   }
 
   handleThrowEnd(e) {
@@ -208,6 +247,19 @@ class App extends Component {
     // Adding a new number
     card_list.unshift(this.state.generator.next());
     this.setState({card_list: card_list});
+  settingsHandleInputChange(event) {
+    const target = event.target;
+    let value = target.type === 'checkbox' ?
+      target.checked : target.value;
+    const name = target.name;
+    let settings = this.state.settings;
+    if (name == 'level') {
+      value = parseInt(value);
+    }
+    settings[name] = value;
+    this.setState({
+      settings: settings,
+    })
   }
 
   render() {
@@ -230,6 +282,9 @@ class App extends Component {
             )}
           </ReactSwing>
         </div>
+        <Settings settings={this.state.settings}
+          handleInputChange={
+          (e) => this.settingsHandleInputChange(e)}/>
       </div>
     );
 
