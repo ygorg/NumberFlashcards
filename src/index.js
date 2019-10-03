@@ -46,11 +46,20 @@ class Card extends Component {
 
   back() {
     return <div className="back">
-      <Textfit mode="multi">
-        <span className="number">{this.state.number}</span> <br />
-        <span className="romaji">{this.state.romaji}</span> <br />
-        <span className="hiragana">{this.state.hiragana}</span> <br />
-        <span className="kanji">{this.state.kanji}</span>
+      <Textfit>
+        <span className="number">{this.state.number}</span>
+        <br />
+        {this.props.settings.dispRomaji && 
+          <span className="romaji">{this.state.romaji}</span>
+        }
+        {this.props.settings.dispRomaji && <br />}
+        {this.props.settings.dispHiragana && 
+          <span className="hiragana">{this.state.hiragana}</span>
+        }
+        {this.props.settings.dispHiragana && <br />}
+        {this.props.settings.dispKanji &&
+          <span className="kanji">{this.state.kanji}</span>
+        }
       </Textfit>
     </div>;
   }
@@ -76,10 +85,31 @@ class NumberGenerator {
     }
   }
 
-  next() {
+  rand(min, max) {
     return Math.floor(
-      Math.random() * (this.state.max - this.state.min + 1) + this.state.min
-    );
+        Math.random() * (max - min + 1) + min
+      );
+  }
+
+  next(props) {
+    // TODO: Refactor 
+    const level = (props||{}).level;
+    if (level === 0) {
+      // Numbers from 0 to 10
+      return this.rand(0, 11)
+    } else if (level === 1) {
+      // Numbers from 0 to 100
+      return this.rand(0, 101)
+    } else if (level === 2) {
+      // Special cases numbers (300, 800 and so)
+      const di = convert.romaji_dict;
+      const keys = Object.keys(di).slice(0,-1);
+      const ind = parseInt(Math.random() * keys.length);
+      return keys[ind];
+    } else if (level === 3) {
+      // Numbers from 10 to 99 999
+      return this.rand(10, 100000);
+    }
   }
 }
 
@@ -279,6 +309,7 @@ class App extends Component {
           >
             {this.state.card_list.map((number, index) =>
               <Card className="card" value={number} key={number}/>
+                    settings={this.state.settings}/>
             )}
           </ReactSwing>
         </div>
