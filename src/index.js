@@ -255,7 +255,8 @@ class App extends Component {
     var generator = new NumberGenerator();
 
     this.state = {
-      card_list: [generator.next(), generator.next(), generator.next()],
+      seen_cards: 0,
+      card_list: [],
       stack: null,
       generator: generator,
       settings: {level: 2, dispRomaji: true},
@@ -263,6 +264,22 @@ class App extends Component {
 
     // defining defaults values for settings here
     // TODO: maybe refactor so defaults are defined in Settings class
+
+    this.newCard();
+    this.newCard();
+  }
+
+  newCard() {
+    // Add a new number to card_list
+    // Also assign the card "key" which is unique for every card
+    // TODO: refactor this is not pure
+    this.state.seen_cards += 1;
+    this.state.card_list.unshift({
+      key: this.state.seen_cards,
+      number: this.state.generator.next(this.state.settings),
+    });
+    return {card_list: this.state.card_list,
+            seen_cards: this.state.seen_cards};
   }
 
   handleThrowEnd(e) {
@@ -274,9 +291,15 @@ class App extends Component {
     var card_list = this.state.card_list.slice();
     card_list.splice(ind, 1);
 
+    // This is not pure but is linked to the fact the newCard is not pure either
+    this.state.card_list = card_list;
+
     // Adding a new number
-    card_list.unshift(this.state.generator.next());
-    this.setState({card_list: card_list});
+
+    let new_state = this.newCard();
+    this.setState(new_state);
+  }
+
   settingsHandleInputChange(event) {
     const target = event.target;
     let value = target.type === 'checkbox' ?
@@ -307,8 +330,9 @@ class App extends Component {
             ref="stackEl"
             throwoutend={e => this.handleThrowEnd(e)}
           >
-            {this.state.card_list.map((number, index) =>
-              <Card className="card" value={number} key={number}/>
+            {this.state.card_list.map((e) =>
+              <Card className="card" value={e.number}
+                    key={e.key}
                     settings={this.state.settings}/>
             )}
           </ReactSwing>
