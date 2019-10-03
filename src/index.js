@@ -13,8 +13,18 @@ class Card extends Component {
   */
   constructor(props) {
     super(props);
+
+    /* Add spaces every 3 digits */
+    let [left, right] = String(props.value).split('.');
+    left = left.split('');
+    for (var i = 0; i < Math.ceil(left.length / 3) - 1; i++) {
+      left.splice(left.length - (i + ((i+1)*3)), 0, ' ');
+    }
+    left = left.join('');
+    let number = [left].concat([right]).filter((e) => e).join('.');
+
     this.state = {
-      number: props.value,
+      number: number,
       romaji: convert.web_convert(props.value, 'R'),
       kanji: convert.web_convert(props.value, 'K'),
       hiragana: convert.web_convert(props.value, 'H'),
