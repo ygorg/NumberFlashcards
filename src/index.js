@@ -195,6 +195,8 @@ class ReactSwing extends Component {
 
 
     // TODO: What does this actually do ?
+    //  Is this required to render the children ?
+    //  Or is this only to add the handlers?
     return (
       <div id={this.props.id} className={this.props.className}>
         {React.Children
@@ -317,6 +319,7 @@ class App extends Component {
 
   render() {
     /* Render the Swing stack and the cards using card_list */
+    // TODO: key should different for every card !
     return (
       <div>
         <div id="viewport">
@@ -342,14 +345,6 @@ class App extends Component {
           (e) => this.settingsHandleInputChange(e)}/>
       </div>
     );
-
-    /* Button to add card by adding a value in card_list */
-    /*<div><input type="button" value="Add" onClick={() =>{
-          let card_list = this.state.card_list.slice();
-          this.setState({card_list:
-            card_list.concat([this.state.generator.next()])
-          });
-        }} /></div>*/
   }
 }
 
